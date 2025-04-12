@@ -1,0 +1,4 @@
+name,currency,price,price_for_quantity,quantity_unit
+Test_Item_004,BGN,9.99,1,бр.
+Test_Item_005,USD,5.50,2,кг.
+Test_Item_006,EUR,15.75,3,л.
