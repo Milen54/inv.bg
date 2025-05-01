@@ -1,7 +1,6 @@
 package api;
 
 import api.base.BaseApiTest;
-import api.dataprovider.ItemDataProvider;
 import api.dto.Item;
 import api.dto.Items;
 import com.google.gson.Gson;
@@ -10,7 +9,9 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 
 public class ItemAPITest extends BaseApiTest {
 
@@ -63,11 +64,12 @@ public class ItemAPITest extends BaseApiTest {
         Assertions.assertTrue(created.getId() > 0);
     }
 
-    @Test(dataProvider = "csvItems", dataProviderClass = ItemDataProvider.class)
+    @ParameterizedTest
+    @CsvFileSource(resources = "/items.csv", numLinesToSkip = 1)
     @Tag("api")
     @Tag("items")
     @DisplayName("Can create item from CSV")
-    public void canCreateItemFromCsv(String name, String currency, Float price, Integer pfq, String quantityUnit) {
+    public void canCreateItemFromCsv(String name, String currency, float price, int pfq, String quantityUnit) {
 
         Item item = new Item();
         item.setName(name);
@@ -81,7 +83,7 @@ public class ItemAPITest extends BaseApiTest {
 
         Item created = gson.fromJson(response.getBody().asString(), Item.class);
         Assertions.assertNotNull(created.getId());
-        Assertions.assertTrue(created.getId()>0);
+        Assertions.assertTrue(created.getId() > 0);
     }
 
     @Test
