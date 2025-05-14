@@ -5,6 +5,10 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import static core.Config.BASE_PATH;
 import static core.Config.BASE_URI;
 import static io.restassured.path.json.config.JsonParserType.GSON;
@@ -33,7 +37,7 @@ public class ItemAPI {
     }
 
     //TODO: Implement method and create one test
-    //GET Request
+    //GET Request with valid ID
     public Response getItem(int id){
         return RestAssured.given()
                 .log().all()
@@ -71,8 +75,27 @@ public class ItemAPI {
                 .baseUri(BASE_URI)
                 .auth().oauth2(token)
                 .basePath(BASE_PATH)
+                .header("User-Agent", "Mozilla")
                 .when()
                 .delete(ENDPOINT + "/" + id);
+    }
+
+    public Response updateTags(int id, List<String> tags) {
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("tags", tags);
+        return RestAssured.given()
+                .log().all()
+                .baseUri(BASE_URI)
+                .auth().oauth2(token)
+                .basePath(BASE_PATH)
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .header("User-Agent", "Mozilla")
+                .body(body)
+                .when()
+                .patch(ENDPOINT + "/" + id)
+                .prettyPeek();
     }
 
 }
